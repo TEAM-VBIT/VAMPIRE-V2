@@ -297,42 +297,45 @@ class MongoDB:
 
     async def migrate_coll(self) -> None:
         from bson import ObjectId
+
         logger.info("Migrating users and chats from old collections...")
 
-        musers, mchats, done = [], [], []
+        musers, done = [], []
         ulist = [user async for user in self.db.tgusersdb.find()]
         ulist.extend([user async for user in self.usersdb.find()])
 
         for user in ulist:
+            user_id = (
+                int(user["user_id"])
+                if isinstance(user.get("_id"), ObjectId)
+                else int(user["_id"])
+            )
+            if user_id in done:
+                continue
+            done.append(user_id)
             if isinstance(user.get("_id"), ObjectId):
-                user_id = int(user["user_id"])
-                if user_id in done:
-                    continue
-                done.append(user_id)
                 musers.append(user)
             else:
-                user_id = int(user["_id"])
-                if user_id in done:
-                    continue
-                done.append(user_id)
                 musers.append({"_id": user_id})
+
         await self.usersdb.drop()
         await self.db.tgusersdb.drop()
         if musers:
             await self.usersdb.insert_many(musers)
 
+        mchats, done = [], []
         async for chat in self.chatsdb.find():
+            chat_id = (
+                int(chat["chat_id"])
+                if isinstance(chat.get("_id"), ObjectId)
+                else int(chat["_id"])
+            )
+            if chat_id in done:
+                continue
+            done.append(chat_id)
             if isinstance(chat.get("_id"), ObjectId):
-                chat_id = int(chat["chat_id"])
-                if chat_id in mchats:
-                    continue
-                done.append(chat_id)
                 mchats.append(chat)
             else:
-                chat_id = int(chat["_id"])
-                if chat_id in done:
-                    continue
-                done.append(chat_id)
                 mchats.append({"_id": chat_id})
         await self.chatsdb.drop()
         if mchats:

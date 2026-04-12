@@ -33,9 +33,14 @@ class Utilities:
         else:
             return f"{bytes / 1024:.2f} KB"
 
-    def to_seconds(self, time: str) -> int:
-        parts = [int(p) for p in time.strip().split(":")]
-        return sum(value * 60**i for i, value in enumerate(reversed(parts)))
+    def to_seconds(self, time: str | None) -> int:
+        if not time or not isinstance(time, str):
+            return 0
+        try:
+            parts = [int(p) for p in time.strip().split(":")]
+            return sum(value * 60**i for i, value in enumerate(reversed(parts)))
+        except (ValueError, TypeError):
+            return 0
 
 
     def get_url(self, message_1: types.Message) -> str | None:
