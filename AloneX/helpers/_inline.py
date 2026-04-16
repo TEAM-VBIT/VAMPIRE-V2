@@ -3,7 +3,8 @@
 # This file is part of AloneXMusic
 
 
-from pyrogram import types
+from pyrogram import enums, types
+from pyrogram.enums import ButtonStyle
 
 from AloneX import app, config, lang
 from AloneX.core.lang import lang_codes
