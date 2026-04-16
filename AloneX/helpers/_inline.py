@@ -32,7 +32,7 @@ class Inline:
             )
         elif timer:
             keyboard.append(
-                [self.ikb(text=timer, callback_data=f"controls status {chat_id}")]
+                [self.ikb(text=timer, callback_data=f"controls status {chat_id}", style=ButtonStyle.PRIMARY)]
             )
 
         if not remove:
