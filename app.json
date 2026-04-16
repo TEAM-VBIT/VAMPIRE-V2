@@ -2,7 +2,12 @@
     "name": "˹𝞚𝙡𝞸𝞰𝞮 ✗ 𝙈𝙪𝙨𝙞𝙘 ♪˼",
     "description": "A Telegram Music Player Bot, written in Python with Pyrogram and Py-Tgcalls.",
     "logo": "https://litter.catbox.moe/xroqew.jpg",
-    "keywords": ["python3", "telegram", "bot", "music-bot"],
+    "keywords": [
+        "python3",
+        "telegram",
+        "bot",
+        "music-bot"
+    ],
     "stack": "container",
     "env": {
         "API_ID": {
@@ -39,6 +44,46 @@
             "description": "A Pyrogram v2 String Session from @StringFatherBot on Telegram.",
             "value": "",
             "required": true
+        },
+        "SESSION2": {
+            "description": "Assistant Session 2 (Optional).",
+            "value": "",
+            "required": false
+        },
+        "SESSION3": {
+            "description": "Assistant Session 3 (Optional).",
+            "value": "",
+            "required": false
+        },
+        "AUTO_LEAVE": {
+            "description": "Auto leave chat after some time (Optional).",
+            "value": "False",
+            "required": false
+        },
+        "AUTO_END": {
+            "description": "Auto end stream if no one is in VC (Optional).",
+            "value": "False",
+            "required": false
+        },
+        "VIDEO_PLAY": {
+            "description": "Enable video playback (Optional).",
+            "value": "True",
+            "required": false
+        },
+        "DURATION_LIMIT": {
+            "description": "Maximum duration allowed for a track in minutes (Optional).",
+            "value": "60",
+            "required": false
+        },
+        "SUPPORT_CHANNEL": {
+            "description": "Your support channel link (Optional).",
+            "value": "https://t.me/AloneUpdates",
+            "required": false
+        },
+        "SUPPORT_CHAT": {
+            "description": "Your support group link (Optional).",
+            "value": "https://t.me/AloneBotSupport",
+            "required": false
         }
     }
 }
