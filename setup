@@ -40,6 +40,7 @@ install_pkg() {
     for pkg in "$@"; do
         command -v "$pkg" &>/dev/null || {
             pprint "$pkg not found, installing... "
+            [ "$pkg" == "pip3" ] && pkg="python3-pip"
             sudo apt install -y "$pkg" &>/dev/null && pprint "Done.\n\n" "cgreen" || pprint "Failed.\n\n" "cred"
         }
     done
@@ -76,7 +77,7 @@ pprint "Welcome to the AloneXMusic Installation Setup\n\n" "cmagenta"
 sleep 1
 
 update
-install_pkg python3-pip ffmpeg unzip
+install_pkg pip3 ffmpeg unzip
 install_py
 
 pprint "\nAloneXMusic Installation Completed.\n" "cgreen"
