@@ -60,12 +60,12 @@ async def start(_, message: types.Message):
 @lang.language()
 async def settings(_, message: types.Message):
     admin_only = await db.get_play_mode(message.chat.id)
-    cmd_delete = await db.get_cmd_delete(message.chat.id)
+    autoplay = await db.get_autoplay(message.chat.id)
     _language = await db.get_lang(message.chat.id)
     await message.reply_text(
         text=message.lang["start_settings"].format(message.chat.title),
         reply_markup=buttons.settings_markup(
-            message.lang, admin_only, cmd_delete, _language, message.chat.id
+            message.lang, admin_only, _language, message.chat.id, autoplay=autoplay
         ),
         quote=True,
     )
