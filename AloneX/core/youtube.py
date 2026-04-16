@@ -1,21 +1,20 @@
 # Copyright (c) 2025 TheHamkerAlone
 # Licensed under the MIT License.
 # This file is part of AloneXMusic
-#ALONE-CODER
+# ALONE-CODER
 
 import os
 import re
-import yt_dlp
-import random
 import asyncio
 import aiohttp
-from pathlib import Path
-
+import random
+import yt_dlp
 from py_yt import Playlist, VideosSearch
-
 from AloneX import logger
 from AloneX.helpers import Track, utils
 
+API_URL = "https://shrutibots.site"
+DOWNLOAD_DIR = "downloads"
 
 class YouTube:
     def __init__(self):
@@ -32,9 +31,10 @@ class YouTube:
 
     def get_cookies(self):
         if not self.checked:
-            for file in os.listdir(self.cookie_dir):
-                if file.endswith(".txt"):
-                    self.cookies.append(f"{self.cookie_dir}/{file}")
+            if os.path.exists(self.cookie_dir):
+                for file in os.listdir(self.cookie_dir):
+                    if file.endswith(".txt"):
+                        self.cookies.append(f"{self.cookie_dir}/{file}")
             self.checked = True
         if not self.cookies:
             if not self.warned:
@@ -45,6 +45,8 @@ class YouTube:
 
     async def save_cookies(self, urls: list[str]) -> None:
         logger.info("Saving cookies from urls...")
+        if not os.path.exists(self.cookie_dir):
+            os.makedirs(self.cookie_dir)
         async with aiohttp.ClientSession() as session:
             for i, url in enumerate(urls):
                 path = f"{self.cookie_dir}/cookie_{i}.txt"
@@ -100,47 +102,56 @@ class YouTube:
         return tracks
 
     async def download(self, video_id: str, video: bool = False) -> str | None:
-        url = self.base + video_id
-        ext = "mp4" if video else "webm"
-        filename = f"downloads/{video_id}.{ext}"
+        if not video_id or len(video_id) < 11:
+            return None
 
-        if Path(filename).exists():
-            return filename
+        os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+        ext = "mp4" if video else "mp3"
+        file_path = os.path.join(DOWNLOAD_DIR, f"{video_id}.{ext}")
 
-        cookie = self.get_cookies()
-        base_opts = {
-            "outtmpl": "downloads/%(id)s.%(ext)s",
-            "quiet": True,
-            "noplaylist": True,
-            "geo_bypass": True,
-            "no_warnings": True,
-            "overwrites": False,
-            "nocheckcertificate": True,
-            "cookiefile": cookie,
-        }
+        if os.path.exists(file_path):
+            return file_path
 
-        if video:
-            ydl_opts = {
-                **base_opts,
-                "format": "(bestvideo[height<=?720][width<=?1280][ext=mp4])+(bestaudio)",
-                "merge_output_format": "mp4",
-            }
-        else:
-            ydl_opts = {
-                **base_opts,
-                "format": "bestaudio[ext=webm][acodec=opus]",
-            }
+        try:
+            async with aiohttp.ClientSession() as session:
+                params = {"url": video_id, "type": "video" if video else "audio"}
+                async with session.get(
+                    f"{API_URL}/download",
+                    params=params,
+                    timeout=aiohttp.ClientTimeout(total=10)
+                ) as response:
+                    if response.status != 200:
+                        return None
+                    data = await response.json()
 
-        def _download():
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                try:
-                    ydl.download([url])
-                except (yt_dlp.utils.DownloadError, yt_dlp.utils.ExtractorError):
-                    if cookie: self.cookies.remove(cookie)
+                token = data.get("download_token")
+                if not token:
                     return None
-                except Exception as ex:
-                    logger.warning("Download failed: %s", ex)
-                    return None
-            return filename
 
-        return await asyncio.to_thread(_download)
+                stream_url = f"{API_URL}/stream/{video_id}?type={'video' if video else 'audio'}&token={token}"
+                async with session.get(
+                    stream_url,
+                    timeout=aiohttp.ClientTimeout(total=600 if video else 300)
+                ) as resp:
+                    if resp.status == 302:
+                        redirect_url = resp.headers.get('Location')
+                        if redirect_url:
+                            async with session.get(redirect_url) as final_resp:
+                                if final_resp.status == 200:
+                                    await self._write_file(file_path, final_resp)
+                    elif resp.status == 200:
+                        await self._write_file(file_path, resp)
+
+                if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
+                    return file_path
+        except Exception as e:
+            logger.warning(f"Download error: {e}")
+            if os.path.exists(file_path):
+                try: os.remove(file_path)
+                except: pass
+        return None
+
+    async def _write_file(self, file_path, response):
+        with open(file_path, "wb") as f:
+            async for chunk in response.content.iter_chunked(16384):
+                f.write(chunk)
