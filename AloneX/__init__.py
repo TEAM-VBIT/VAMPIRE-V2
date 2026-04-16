@@ -5,6 +5,8 @@
 
 import time
 import logging
+import static_ffmpeg
+static_ffmpeg.add_paths()
 from logging.handlers import RotatingFileHandler
 
 logging.basicConfig(
