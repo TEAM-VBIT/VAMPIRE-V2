@@ -31,9 +31,9 @@ async def start(_, message: types.Message):
 
     private = message.chat.type == enums.ChatType.PRIVATE
     _text = (
-        message.lang["start_pm"].format(message.from_user.first_name, app.name)
+        "✨ " + message.lang["start_pm"].format(message.from_user.first_name, app.name)
         if private
-        else message.lang["start_gp"].format(app.name)
+        else "🎶 " + message.lang["start_gp"].format(app.name)
     )
 
     key = buttons.start_key(message.lang, private)
@@ -63,7 +63,7 @@ async def settings(_, message: types.Message):
     cmd_delete = await db.get_cmd_delete(message.chat.id)
     _language = await db.get_lang(message.chat.id)
     await message.reply_text(
-        text=message.lang["start_settings"].format(message.chat.title),
+        text="⚙️ " + message.lang["start_settings"].format(message.chat.title),
         reply_markup=buttons.settings_markup(
             message.lang, admin_only, cmd_delete, _language, message.chat.id
         ),
