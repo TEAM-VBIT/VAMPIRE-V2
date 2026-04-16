@@ -90,7 +90,9 @@ class Inline:
             [
                 [
                     self.ikb(
-                        text=_text, callback_data=f"controls force {chat_id} {item_id}"
+                        text=_text,
+                        callback_data=f"controls force {chat_id} {item_id}",
+                        style=ButtonStyle.SUCCESS,
                     )
                 ]
             ]
@@ -101,7 +103,15 @@ class Inline:
     ) -> types.InlineKeyboardMarkup:
         _action = "pause" if playing else "resume"
         return self.ikm(
-            [[self.ikb(text=_text, callback_data=f"controls {_action} {chat_id} q")]]
+            [
+                [
+                    self.ikb(
+                        text=_text,
+                        callback_data=f"controls {_action} {chat_id} q",
+                        style=ButtonStyle.SUCCESS,
+                    )
+                ]
+            ]
         )
 
     def settings_markup(
