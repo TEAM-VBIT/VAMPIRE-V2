@@ -107,7 +107,9 @@ async def _controls(_, query: types.CallbackQuery):
                 flags=re.DOTALL,
             )
             keyboard = buttons.controls(
-                chat_id, status=status if action != "resume" else None
+                chat_id,
+                status=status if action != "resume" else None,
+                _lang=query.lang,
             )
         await query.edit_message_text(
             f"{mtext}\n\n<blockquote>{reply}</blockquote>", reply_markup=keyboard
