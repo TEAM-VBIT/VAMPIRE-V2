@@ -46,8 +46,8 @@ def checkUB(play):
             ):
                 return await m.reply_text(m.lang["play_admin"])
 
+        client = await db.get_client(chat_id)
         if chat_id not in db.active_calls:
-            client = await db.get_client(chat_id)
             try:
                 member = await app.get_chat_member(chat_id, client.id)
                 if member.status in [
@@ -111,7 +111,8 @@ def checkUB(play):
                     )
 
                 await umm.delete()
-                await client.resolve_peer(chat_id)
+
+        await client.resolve_peer(chat_id)
 
         if await db.get_cmd_delete(chat_id):
             try:
