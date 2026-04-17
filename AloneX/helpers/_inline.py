@@ -24,6 +24,7 @@ class Inline:
         status: str = None,
         timer: str = None,
         remove: bool = False,
+        _lang: dict = None,
     ) -> types.InlineKeyboardMarkup:
         keyboard = []
         if status:
@@ -45,7 +46,33 @@ class Inline:
                     self.ikb(text="▢", callback_data=f"controls stop {chat_id}", style=ButtonStyle.DANGER),
                 ]
             )
+            if not _lang:
+                _lang = lang.languages["en"]
+            keyboard.append(
+                [
+                    self.ikb(
+                        text=_lang.get("add_me", "✙ 𝐀ᴅᴅ 𝐌є 𝐈η 𝐘συʀ 𝐆ʀσυᴘ ✙"),
+                        url=f"https://t.me/{app.username}?startgroup=true",
+                        style=ButtonStyle.PRIMARY,
+                    ),
+                ]
+            )
+            keyboard.append(
+                [
+                    self.ikb(
+                        text=_lang.get("channel", "˹ 𝐔ᴘᴅᴧᴛєs ˼"),
+                        url=config.SUPPORT_CHANNEL,
+                        style=ButtonStyle.SUCCESS,
+                    ),
+                    self.ikb(
+                        text=_lang.get("close", "⌯ 𝐂ʟσsє ⌯"),
+                        callback_data="help close",
+                        style=ButtonStyle.DANGER,
+                    ),
+                ]
+            )
         return self.ikm(keyboard)
+
 
     def help_markup(
         self, _lang: dict, back: bool = False
