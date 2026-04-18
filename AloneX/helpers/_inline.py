@@ -60,7 +60,7 @@ class Inline:
             keyboard.append(
                 [
                     self.ikb(
-                        text=_lang.get("channel", "🥂˹ 𝐔ᴘᴅᴧᴛєs ˼"),
+                        text=_lang.get("channel", "˹ 𝐔ᴘᴅᴧᴛєs ˼"),
                         url=config.SUPPORT_CHANNEL,
                         style=ButtonStyle.SUCCESS,
                     ),
