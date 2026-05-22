@@ -5,11 +5,11 @@ load_dotenv()
 
 class Config:
     def __init__(self):
-        self.API_ID = int(getenv("API_ID", "24832913"))
-        self.API_HASH = getenv("API_HASH", "caff31b386e4a097370231391e0e0a28")
+        self.API_ID = int(getenv("API_ID", "24832"))
+        self.API_HASH = getenv("API_HASH", "caff31b386e4a0")
 
-        self.BOT_TOKEN = getenv("BOT_TOKEN", "8607875319:AAFfUPElsmyYTNywNmdIWe3YIuweOKOTI98")
-        self.MONGO_URL = getenv("MONGO_URL", "mongodb+srv://DILCHOR:OWNER@dilchor.tenqxht.mongodb.net/?retryWrites=true&w=majority&appName=Dilchor")
+        self.BOT_TOKEN = getenv("BOT_TOKEN", "8607875319:AAFfUPElsmyYTNyw")
+        self.MONGO_URL = getenv("MONGO_URL", "mongodb+srv://DILCHORmajority&appName=Dilchor")
 
         self.LOGGER_ID = int(getenv("LOGGER_ID", "-1002267263891"))
         self.OWNER_ID = int(getenv("OWNER_ID", "8354805952"))
@@ -18,7 +18,7 @@ class Config:
         self.QUEUE_LIMIT = int(getenv("QUEUE_LIMIT", 20))
         self.PLAYLIST_LIMIT = int(getenv("PLAYLIST_LIMIT", 20))
 
-        self.SESSION1 = getenv("SESSION", "BQIcsSwACE2PlJVXsUtb0Kz6s8O3yuQmdnVszaN7rhUhINVLDM0viI7tN5ANsPUSNq5E6f1o_L_tE-dcfOLKe2JYVUav9LmAJ8h39sCySPo6OMJkJvDni03HTUw0RHLrUQGQXFIl2kijcmsLSalIZzBzS5bkpdF2phc1AA1SWgOoA5XCdOruQ4xp3H5z9bJpqZUSOkrjICfdhL5CNaTQ_dXY7mzy2jXKWoSYBH5iBnlbqRVMd4Ac1vMwy_-i46nnUKwHG0SHR2nptd652pZctGPzdfctNeQOegDTBRMYqU_TTNlDYZX1OMPiR0ofkN7M1PZ3fZhxYyMYTF2ybYtI8oftSMXh3wAAAAIBjtNYAA")
+        self.SESSION1 = getenv("SESSION", "BQIcsSwACE2PlJV0YTF2ybYtI8oftSMXh3wAAAAIBjtNYAA")
         self.SESSION2 = getenv("SESSION2", None)
         self.SESSION3 = getenv("SESSION3", None)
 
