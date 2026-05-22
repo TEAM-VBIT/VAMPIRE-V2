@@ -8,11 +8,11 @@ class Config:
         self.API_ID = int(getenv("API_ID", "24832"))
         self.API_HASH = getenv("API_HASH", "caff31b386e4a0")
 
-        self.BOT_TOKEN = getenv("BOT_TOKEN", "8607875319:AAFfUPElsmyYTNyw")
-        self.MONGO_URL = getenv("MONGO_URL", "mongodb+srv://DILCHORmajority&appName=Dilchor")
+        self.BOT_TOKEN = getenv("BOT_TOKEN", "8629527009:AAGbrehqLedDjGnG3dw42WK7NN1tTaIAVRU")
+        self.MONGO_URL = getenv("MONGO_URL", "mongodb+srv://Jani_Sanatani_Power:RamRP@jani.elxnxrd.mongodb.net/?appName=Jani)
 
-        self.LOGGER_ID = int(getenv("LOGGER_ID", "-1002267263891"))
-        self.OWNER_ID = int(getenv("OWNER_ID", "8354805952"))
+        self.LOGGER_ID = int(getenv("LOGGER_ID", "-1003280956735"))
+        self.OWNER_ID = int(getenv("OWNER_ID", "5099526956"))
 
         self.DURATION_LIMIT = int(getenv("DURATION_LIMIT", 10800)) * 10800
         self.QUEUE_LIMIT = int(getenv("QUEUE_LIMIT", 20))
@@ -23,7 +23,7 @@ class Config:
         self.SESSION3 = getenv("SESSION3", None)
 
         self.SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/LunaBots1")
-        self.SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/+n0Uo8KncgHxmNDU1")
+        self.SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/+1L0u7kV8LLI0NTI1")
 
         self.AUTO_END: bool = getenv("AUTO_END", False)
         self.AUTO_LEAVE: bool = getenv("AUTO_LEAVE", False)
