@@ -5,8 +5,8 @@ load_dotenv()
 
 class Config:
     def __init__(self):
-        self.API_ID = int(getenv("API_ID", "24832"))
-        self.API_HASH = getenv("API_HASH", "caff31b386e4a0")
+        self.API_ID = int(getenv("API_ID", "34708578"))
+        self.API_HASH = getenv("API_HASH", "d532e5b947d462f858077d614f31f22b")
 
         self.BOT_TOKEN = getenv("BOT_TOKEN", "8629527009:AAGbrehqLedDjGnG3dw42WK7NN1tTaIAVRU")
         self.MONGO_URL = getenv("MONGO_URL", "mongodb+srv://Jani_Sanatani_Power:RamRP@jani.elxnxrd.mongodb.net/?appName=Jani")
