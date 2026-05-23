@@ -192,7 +192,7 @@ class Inline:
                     self.ikb(text=lang["aloneowner"], user_id=config.OWNER_ID, style=ButtonStyle.DANGER),
                     self.ikb(
                         text=lang["source"],
-                        url="https://github.com/TeamAloneOp/AloneX", style=ButtonStyle.DANGER
+                        url="https://t.me/Infinity_Jack_TG", style=ButtonStyle.DANGER
                     )
                 ]
             ]
