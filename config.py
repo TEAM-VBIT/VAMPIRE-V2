@@ -5,7 +5,7 @@ load_dotenv()
 
 class Config:
     def __init__(self):
-        self.API_ID = int(getenv("API_ID", "34708578"))
+        self.API_ID = int(getenv("API_ID", "39665202"))
         self.API_HASH = getenv("API_HASH", "d532e5b947d462f858077d614f31f22b")
 
         self.BOT_TOKEN = getenv("BOT_TOKEN", "😁😁😁😁😁😁😁")
