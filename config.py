@@ -23,7 +23,7 @@ class Config:
         self.SESSION3 = getenv("SESSION3", None)
 
         self.SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/LunaBots1")
-        self.SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/+1L0u7kV8LLI0NTI1")
+        self.SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/Luna_Support_Team")
 
         self.AUTO_END: bool = getenv("AUTO_END", False)
         self.AUTO_LEAVE: bool = getenv("AUTO_LEAVE", False)
