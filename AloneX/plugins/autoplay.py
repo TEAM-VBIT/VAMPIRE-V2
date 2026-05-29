@@ -12,7 +12,6 @@ autoplay_status = {}
 @app.on_message(filters.command("autoplay"))
 async def toggle_autoplay(client, message: Message):
 
-```
 chat_id = message.chat.id
 
 if len(message.command) < 2:
@@ -47,13 +46,11 @@ else:
         "/autoplay enable\n"
         "/autoplay disable"
     )
-```
 
 # ================= AUTOPLAY FUNCTION =================
 
 async def auto_play(chat_id):
 
-```
 if not autoplay_status.get(chat_id):
     return
 
@@ -80,4 +77,3 @@ try:
 
 except Exception as e:
     print(e)
-```
