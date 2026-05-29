@@ -17,8 +17,23 @@ from pyrogram.types import InputMediaPhoto, Message
 from pytgcalls import PyTgCalls, exceptions, types
 from pytgcalls.pytgcalls_session import PyTgCallsSession
 
-from AloneX import app, config, db, lang, logger, queue, userbot, yt
-from AloneX.helpers import Media, Track, buttons, thumb
+from AloneX import (
+    app,
+    config,
+    db,
+    lang,
+    logger,
+    queue,
+    userbot,
+    yt
+)
+
+from AloneX.helpers import (
+    Media,
+    Track,
+    buttons,
+    thumb
+)
 
 
 class TgCall(PyTgCalls):
@@ -27,13 +42,25 @@ class TgCall(PyTgCalls):
         self.clients = []
 
     async def pause(self, chat_id: int) -> bool:
+
         client = await db.get_assistant(chat_id)
-        await db.playing(chat_id, paused=True)
+
+        await db.playing(
+            chat_id,
+            paused=True
+        )
+
         return await client.pause(chat_id)
 
     async def resume(self, chat_id: int) -> bool:
+
         client = await db.get_assistant(chat_id)
-        await db.playing(chat_id, paused=False)
+
+        await db.playing(
+            chat_id,
+            paused=False
+        )
+
         return await client.resume(chat_id)
 
     async def stop(self, chat_id: int) -> None:
@@ -47,7 +74,10 @@ class TgCall(PyTgCalls):
             pass
 
         try:
-            await client.leave_call(chat_id, close=False)
+            await client.leave_call(
+                chat_id,
+                close=False
+            )
         except:
             pass
 
@@ -280,6 +310,18 @@ class TgCall(PyTgCalls):
                     "Punjabi Trending Songs",
                     "Latest Punjabi Songs",
 
+                    # Bhojpuri
+                    "Trending Bhojpuri Songs",
+                    "Latest Bhojpuri Songs 2026",
+                    "Bhojpuri Viral Songs",
+                    "Pawan Singh Hit Songs",
+                    "Khesari Lal Yadav Songs",
+                    "Neelkamal Singh Songs",
+                    "Shilpi Raj Hit Songs",
+                    "Arvind Akela Kallu Songs",
+                    "Bhojpuri Romantic Songs",
+                    "Bhojpuri DJ Songs",
+
                     # Old Gold
                     "90s Bollywood Hits",
                     "Evergreen Hindi Songs",
@@ -291,7 +333,7 @@ class TgCall(PyTgCalls):
 
                 search = await yt.search(
                     query,
-                    random.randint(1, 30),
+                    random.randint(1, 50),
                     video=False,
                 )
 
