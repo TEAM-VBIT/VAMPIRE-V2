@@ -1,7 +1,7 @@
 # Copyright (c) 2025 TheHamkerAlone
 # Licensed under the MIT License.
 # This file is part of AloneXMusic
-#ALONE-CODER
+# ALONE-CODER
 
 from ntgcalls import (
     ConnectionNotFound,
@@ -20,6 +20,7 @@ from AloneX.helpers import Media, Track, buttons, thumb
 
 
 class TgCall(PyTgCalls):
+
     def __init__(self):
         self.clients = []
 
@@ -56,6 +57,7 @@ class TgCall(PyTgCalls):
     ) -> None:
 
         client = await db.get_assistant(chat_id)
+
         _lang = await lang.get_lang(chat_id)
 
         _thumb = (
@@ -65,9 +67,12 @@ class TgCall(PyTgCalls):
         )
 
         if not media.file_path:
-            await message.edit_text(
-                _lang["error_no_file"].format(config.SUPPORT_CHAT)
-            )
+
+            if message:
+                await message.edit_text(
+                    _lang["error_no_file"].format(config.SUPPORT_CHAT)
+                )
+
             return await self.play_next(chat_id)
 
         stream = types.MediaStream(
@@ -84,6 +89,7 @@ class TgCall(PyTgCalls):
         )
 
         try:
+
             await client.play(
                 chat_id=chat_id,
                 stream=stream,
@@ -91,7 +97,9 @@ class TgCall(PyTgCalls):
             )
 
             if not seek_time:
+
                 media.time = 1
+
                 await db.add_call(chat_id)
 
                 text = _lang["play_media"].format(
@@ -104,15 +112,27 @@ class TgCall(PyTgCalls):
                 keyboard = buttons.controls(chat_id)
 
                 try:
-                    await message.edit_media(
-                        media=InputMediaPhoto(
-                            media=_thumb,
-                            caption=text,
-                        ),
-                        reply_markup=keyboard,
-                    )
+
+                    if message:
+                        await message.edit_media(
+                            media=InputMediaPhoto(
+                                media=_thumb,
+                                caption=text,
+                            ),
+                            reply_markup=keyboard,
+                        )
+                    else:
+                        media.message_id = (
+                            await app.send_photo(
+                                chat_id=chat_id,
+                                photo=_thumb,
+                                caption=text,
+                                reply_markup=keyboard,
+                            )
+                        ).id
 
                 except MessageIdInvalid:
+
                     media.message_id = (
                         await app.send_photo(
                             chat_id=chat_id,
@@ -123,28 +143,44 @@ class TgCall(PyTgCalls):
                     ).id
 
         except FileNotFoundError:
-            await message.edit_text(
-                _lang["error_no_file"].format(config.SUPPORT_CHAT)
-            )
+
+            if message:
+                await message.edit_text(
+                    _lang["error_no_file"].format(config.SUPPORT_CHAT)
+                )
+
             await self.play_next(chat_id)
 
         except exceptions.NoActiveGroupCall:
+
             await self.stop(chat_id)
-            await message.edit_text(_lang["error_no_call"])
+
+            if message:
+                await message.edit_text(_lang["error_no_call"])
 
         except exceptions.NoAudioSourceFound:
-            await message.edit_text(_lang["error_no_audio"])
+
+            if message:
+                await message.edit_text(_lang["error_no_audio"])
+
             await self.play_next(chat_id)
 
         except (ConnectionNotFound, TelegramServerError):
+
             await self.stop(chat_id)
-            await message.edit_text(_lang["error_tg_server"])
+
+            if message:
+                await message.edit_text(_lang["error_tg_server"])
 
         except RTMPStreamingUnsupported:
+
             await self.stop(chat_id)
-            await message.edit_text(_lang["error_rtmp"])
+
+            if message:
+                await message.edit_text(_lang["error_rtmp"])
 
     async def replay(self, chat_id: int) -> None:
+
         if not await db.get_call(chat_id):
             return
 
@@ -165,12 +201,15 @@ class TgCall(PyTgCalls):
 
         try:
             if media and media.message_id:
+
                 await app.delete_messages(
                     chat_id=chat_id,
                     message_ids=media.message_id,
                     revoke=True,
                 )
+
                 media.message_id = 0
+
         except:
             pass
 
@@ -179,6 +218,7 @@ class TgCall(PyTgCalls):
         if not media:
 
             try:
+
                 search = await yt.search(
                     "Latest Hindi Songs",
                     0,
@@ -191,14 +231,18 @@ class TgCall(PyTgCalls):
                 media = search
 
                 if not media.file_path:
+
                     media.file_path = await yt.download(
                         media.id,
-                        video=media.video,
+                        video=False,
                     )
+
+                if not media.file_path:
+                    return await self.stop(chat_id)
 
                 msg = await app.send_message(
                     chat_id,
-                    "▶️ Autoplaying Music..."
+                    "▶️ Autoplaying Next Song..."
                 )
 
                 media.message_id = msg.id
@@ -210,10 +254,12 @@ class TgCall(PyTgCalls):
                 )
 
             except Exception as e:
+
                 print(f"Autoplay Error: {e}")
+
                 return await self.stop(chat_id)
 
-        # ===========================================
+        # ================= NORMAL QUEUE =================
 
         _lang = await lang.get_lang(chat_id)
 
@@ -223,12 +269,14 @@ class TgCall(PyTgCalls):
         )
 
         if not media.file_path:
+
             media.file_path = await yt.download(
                 media.id,
                 video=media.video
             )
 
             if not media.file_path:
+
                 await self.stop(chat_id)
 
                 return await msg.edit_text(
@@ -246,7 +294,9 @@ class TgCall(PyTgCalls):
         )
 
     async def ping(self) -> float:
+
         pings = [client.ping for client in self.clients]
+
         return round(sum(pings) / len(pings), 2)
 
     async def decorators(self, client: PyTgCalls) -> None:
@@ -257,6 +307,7 @@ class TgCall(PyTgCalls):
             if isinstance(update, types.StreamEnded):
 
                 if update.stream_type == types.StreamEnded.Type.AUDIO:
+
                     await self.play_next(update.chat_id)
 
             elif isinstance(update, types.ChatUpdate):
@@ -266,6 +317,7 @@ class TgCall(PyTgCalls):
                     types.ChatUpdate.Status.LEFT_GROUP,
                     types.ChatUpdate.Status.CLOSED_VOICE_CHAT,
                 ]:
+
                     await self.stop(update.chat_id)
 
     async def boot(self) -> None:
