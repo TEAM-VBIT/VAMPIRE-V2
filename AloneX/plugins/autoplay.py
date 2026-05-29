@@ -1,83 +1,83 @@
-```python id="ll4y9g"
 from pyrogram import filters
 from pyrogram.types import Message
 
 from AloneX import app, yt, anon, queue
 
-
 # STORE STATUS
+
 autoplay_status = {}
 
-
-# ================= COMMAND ================= #
+# ================= COMMAND =================
 
 @app.on_message(filters.command("autoplay"))
 async def toggle_autoplay(client, message: Message):
 
-    chat_id = message.chat.id
+```
+chat_id = message.chat.id
 
-    if len(message.command) < 2:
-        return await message.reply_text(
-            "Usage:\n"
-            "/autoplay enable\n"
-            "/autoplay disable"
-        )
+if len(message.command) < 2:
+    return await message.reply_text(
+        "Usage:\n"
+        "/autoplay enable\n"
+        "/autoplay disable"
+    )
 
-    option = message.command[1].lower()
+option = message.command[1].lower()
 
-    if option == "enable":
+if option == "enable":
 
-        autoplay_status[chat_id] = True
+    autoplay_status[chat_id] = True
 
-        await message.reply_text(
-            "✅ Autoplay Enabled"
-        )
+    await message.reply_text(
+        "✅ Autoplay Enabled"
+    )
 
-    elif option == "disable":
+elif option == "disable":
 
-        autoplay_status[chat_id] = False
+    autoplay_status[chat_id] = False
 
-        await message.reply_text(
-            "❌ Autoplay Disabled"
-        )
+    await message.reply_text(
+        "❌ Autoplay Disabled"
+    )
 
-    else:
+else:
 
-        await message.reply_text(
-            "Invalid Usage.\n"
-            "/autoplay enable\n"
-            "/autoplay disable"
-        )
+    await message.reply_text(
+        "Invalid Usage.\n"
+        "/autoplay enable\n"
+        "/autoplay disable"
+    )
+```
 
-
-# ================= AUTOPLAY FUNCTION ================= #
+# ================= AUTOPLAY FUNCTION =================
 
 async def auto_play(chat_id):
 
-    if not autoplay_status.get(chat_id):
+```
+if not autoplay_status.get(chat_id):
+    return
+
+try:
+
+    query = "Latest Hindi Songs"
+
+    file = await yt.search(
+        query,
+        0,
+        video=False,
+    )
+
+    if not file:
         return
 
-    try:
+    queue.add(chat_id, file)
 
-        query = "Latest Hindi Songs"
+    await anon.play_media(
+        chat_id=chat_id,
+        message=None,
+        media=file,
+    )
 
-        file = await yt.search(
-            query,
-            0,
-            video=False,
-        )
-
-        if not file:
-            return
-
-        queue.add(chat_id, file)
-
-        await anon.play_media(
-            chat_id=chat_id,
-            message=None,
-            media=file,
-        )
-
-    except Exception as e:
-        print(e)
+except Exception as e:
+    print(e)
 ```
