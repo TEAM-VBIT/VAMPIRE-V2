@@ -1,14 +1,17 @@
 # Copyright (c) 2025 TheHamkerAlone
 # Licensed under the MIT License.
 # This file is part of AloneXMusic
-#ALONE-CODER
+# ALONE-CODER
 
 import time
 import logging
 import static_ffmpeg
-static_ffmpeg.add_paths()
 from logging.handlers import RotatingFileHandler
 
+# FFmpeg setup
+static_ffmpeg.add_paths()
+
+# Logging setup
 logging.basicConfig(
     format="[%(asctime)s - %(levelname)s] - %(name)s: %(message)s",
     datefmt="%d-%b-%y %H:%M:%S",
@@ -18,23 +21,28 @@ logging.basicConfig(
     ],
     level=logging.INFO,
 )
+
 logging.getLogger("httpx").setLevel(logging.ERROR)
 logging.getLogger("ntgcalls").setLevel(logging.CRITICAL)
 logging.getLogger("pymongo").setLevel(logging.ERROR)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
 logging.getLogger("pytgcalls").setLevel(logging.ERROR)
+
 logger = logging.getLogger(__name__)
 
-
+# Version
 __version__ = "3.0.1"
 
+# Config
 from config import Config
-
 config = Config()
 config.check()
+
+# Globals
 tasks = []
 boot = time.time()
 
+# Core imports
 from AloneX.core.bot import Bot
 app = Bot()
 
@@ -47,11 +55,15 @@ userbot = Userbot()
 from AloneX.core.mongo import MongoDB
 db = MongoDB()
 
+# 🔥 FIX: mongodb alias added (THIS FIXES YOUR ERROR)
+mongodb = db
+
 from AloneX.core.lang import Language
 lang = Language()
 
 from AloneX.core.telegram import Telegram
 from AloneX.core.youtube import YouTube
+
 tg = Telegram()
 yt = YouTube()
 
@@ -62,8 +74,10 @@ from AloneX.core.calls import TgCall
 anon = TgCall()
 
 
+# Stop function
 async def stop() -> None:
     logger.info("Stopping...")
+
     for task in tasks:
         task.cancel()
         try:
