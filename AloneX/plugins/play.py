@@ -11,21 +11,23 @@ from AloneX import anon, app, config, db, lang, queue, tg, yt
 from AloneX.helpers import buttons, utils
 from AloneX.helpers._play import checkUB
 
-# AUTOPLAY IMPORT
-from AloneX.plugins.autoplay import auto_play, autoplay_status
-
 
 def playlist_to_queue(chat_id: int, tracks: list) -> str:
     text = "<blockquote expandable>"
+
     for track in tracks:
         pos = queue.add(chat_id, track)
         text += f"<b>{pos}.</b> {track.title}\n"
+
     text = text[:1948] + "</blockquote>"
+
     return text
 
 
 @app.on_message(
-    filters.command(["play", "playforce", "vplay", "vplayforce"])
+    filters.command(
+        ["play", "playforce", "vplay", "vplayforce"]
+    )
     & filters.group
     & ~app.bl_users
 )
@@ -40,18 +42,30 @@ async def play_hndlr(
     url: str = None,
 ) -> None:
 
-    sent = await m.reply_text(m.lang["play_searching"])
+    sent = await m.reply_text(
+        m.lang["play_searching"]
+    )
 
     file = None
     mention = m.from_user.mention
-    media = tg.get_media(m.reply_to_message) if m.reply_to_message else None
+
+    media = (
+        tg.get_media(m.reply_to_message)
+        if m.reply_to_message
+        else None
+    )
+
     tracks = []
+
+    # ================= URL PLAY ================= #
 
     if url:
 
         if "playlist" in url:
 
-            await sent.edit_text(m.lang["playlist_fetch"])
+            await sent.edit_text(
+                m.lang["playlist_fetch"]
+            )
 
             tracks = await yt.playlist(
                 config.PLAYLIST_LIMIT,
@@ -67,9 +81,11 @@ async def play_hndlr(
 
             file = tracks[0]
             tracks.remove(file)
+
             file.message_id = sent.id
 
         else:
+
             file = await yt.search(
                 url,
                 sent.id,
@@ -82,6 +98,8 @@ async def play_hndlr(
                     config.SUPPORT_CHAT
                 )
             )
+
+    # ================= QUERY PLAY ================= #
 
     elif len(m.command) >= 2:
 
@@ -100,6 +118,8 @@ async def play_hndlr(
                 )
             )
 
+    # ================= REPLY PLAY ================= #
+
     elif media:
 
         setattr(sent, "lang", m.lang)
@@ -109,10 +129,14 @@ async def play_hndlr(
             sent,
         )
 
+    # ================= NO INPUT ================= #
+
     if not file:
         return await sent.edit_text(
             m.lang["play_usage"]
         )
+
+    # ================= DURATION CHECK ================= #
 
     if file.duration_sec > config.DURATION_LIMIT:
         return await sent.edit_text(
@@ -121,7 +145,10 @@ async def play_hndlr(
             )
         )
 
+    # ================= LOGGER ================= #
+
     if await db.is_logger():
+
         await utils.play_log(
             m,
             file.title,
@@ -130,8 +157,14 @@ async def play_hndlr(
 
     file.user = mention
 
+    # ================= FORCE PLAY ================= #
+
     if force:
-        queue.force_add(m.chat.id, file)
+
+        queue.force_add(
+            m.chat.id,
+            file,
+        )
 
     else:
 
@@ -140,7 +173,10 @@ async def play_hndlr(
             file,
         )
 
-        if position != 0 or await db.get_call(m.chat.id):
+        if (
+            position != 0
+            or await db.get_call(m.chat.id)
+        ):
 
             await sent.edit_text(
                 m.lang["play_queued"].format(
@@ -158,6 +194,8 @@ async def play_hndlr(
                 ),
             )
 
+            # ================= PLAYLIST ADD ================= #
+
             if tracks:
 
                 added = playlist_to_queue(
@@ -167,12 +205,17 @@ async def play_hndlr(
 
                 await app.send_message(
                     chat_id=m.chat.id,
-                    text=m.lang["playlist_queued"].format(
-                        len(tracks)
-                    ) + added,
+                    text=(
+                        m.lang["playlist_queued"].format(
+                            len(tracks)
+                        )
+                        + added
+                    ),
                 )
 
             return
+
+    # ================= DOWNLOAD ================= #
 
     if not file.file_path:
 
@@ -182,6 +225,7 @@ async def play_hndlr(
         )
 
         if Path(fname).exists():
+
             file.file_path = fname
 
         else:
@@ -195,44 +239,15 @@ async def play_hndlr(
                 video=video,
             )
 
+    # ================= PLAY MEDIA ================= #
+
     await anon.play_media(
         chat_id=m.chat.id,
         message=sent,
         media=file,
     )
 
-    # ================= AUTOPLAY ================= #
-
-    if autoplay_status.get(m.chat.id):
-
-        async def autoplay_checker():
-
-            while True:
-
-                await utils.sleep(10)
-
-                try:
-                    q = queue.get(m.chat.id)
-
-                    if not q or len(q) == 0:
-
-                        try:
-                            await auto_play(m.chat.id)
-
-                        except Exception as e:
-                            print(e)
-
-                        break
-
-                except Exception as e:
-                    print(e)
-                    break
-
-        app.loop.create_task(
-            autoplay_checker()
-        )
-
-    # ================= PLAYLIST ================= #
+    # ================= PLAYLIST QUEUE ================= #
 
     if not tracks:
         return
@@ -244,7 +259,10 @@ async def play_hndlr(
 
     await app.send_message(
         chat_id=m.chat.id,
-        text=m.lang["playlist_queued"].format(
-            len(tracks)
-        ) + added,
+        text=(
+            m.lang["playlist_queued"].format(
+                len(tracks)
+            )
+            + added
+        ),
     )
