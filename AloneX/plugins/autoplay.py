@@ -45,8 +45,6 @@ async def auto_play(chat_id):
         if not file:
             return
 
-        queue.add(chat_id, file)
-
         await anon.play_media(
             chat_id=chat_id,
             message=None,
