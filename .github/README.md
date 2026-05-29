@@ -12,7 +12,7 @@
 <h2 align="center">
 
 🔴「 𝗜𝗙 𝗔𝗡𝗬 𝗘𝗥𝗥𝗢𝗥 𝗧𝗛𝗘𝗡 𝗦𝗘𝗡𝗗 𝗦𝗦 𝗧𝗢 𝗗𝗠 」🔴
-[![VAMPIRE](https://te.legra.ph/file/fa42213a5129d4a26dd3d.jpg)](https://t.me/lVAMPIRE_KINGl)
+[![VAMPIRE](https://img.shields.io/badge/ᴅᴇᴠ-ᴠᴀᴍᴘɪʀᴇ-ff9800?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/lVAMPIRE_KINGl)
 </p>
 <h3 align="center">
     ─「 ᴅᴇᴩʟᴏʏ ᴏɴ ʟᴏᴄᴀʟ ʜᴏsᴛ/ ᴠᴘs 」─
