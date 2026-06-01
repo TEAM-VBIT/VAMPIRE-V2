@@ -13,7 +13,8 @@ from pyrogram.enums import MessageEntityType
 from pyrogram.types import Message
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-from ytSearch import VideosSearch, Playlist
+from youtubesearchpython.__future__ import VideosSearch
+from youtubesearchpython import Playlist
 from AloneX import LOGGER
 from AloneX.utils.database import is_on_off
 from AloneX.utils.formatters import time_to_seconds
