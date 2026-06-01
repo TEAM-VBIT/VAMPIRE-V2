@@ -7,39 +7,21 @@ load_dotenv()
 class Config:
     def __init__(self):
         self.API_ID = int(getenv("API_ID", "39665202"))
-        self.API_HASH = getenv(
-            "API_HASH",
-            "97e021acb4dd34a06986576fc7214ec7"
-        )
+        self.API_HASH = getenv("API_HASH", "97e021acb4dd34a06986576fc7214ec7")
 
-        self.BOT_TOKEN = getenv(
-            "BOT_TOKEN",
-            "YOUR_BOT_TOKEN"
-        )
-
-        self.MONGO_URL = getenv(
-            "MONGO_URL",
-            "YOUR_MONGO_URL"
-        )
+        self.BOT_TOKEN = getenv("BOT_TOKEN")
+        self.MONGO_URL = getenv("MONGO_URL")
 
         self.LOGGER_ID = int(getenv("LOGGER_ID", "-1002267263891"))
         self.OWNER_ID = int(getenv("OWNER_ID", "5576295421"))
 
-        self.DURATION_LIMIT = int(
-            getenv("DURATION_LIMIT", "10800")
-        )
-
-        self.QUEUE_LIMIT = int(
-            getenv("QUEUE_LIMIT", "20")
-        )
-
-        self.PLAYLIST_LIMIT = int(
-            getenv("PLAYLIST_LIMIT", "20")
-        )
+        self.DURATION_LIMIT = int(getenv("DURATION_LIMIT", "10800"))
+        self.QUEUE_LIMIT = int(getenv("QUEUE_LIMIT", "20"))
+        self.PLAYLIST_LIMIT = int(getenv("PLAYLIST_LIMIT", "20"))
 
         self.SESSION1 = getenv("SESSION")
-        self.SESSION2 = getenv("SESSION2", None)
-        self.SESSION3 = getenv("SESSION3", None)
+        self.SESSION2 = getenv("SESSION2")
+        self.SESSION3 = getenv("SESSION3")
 
         self.SUPPORT_CHANNEL = getenv(
             "SUPPORT_CHANNEL",
@@ -51,22 +33,25 @@ class Config:
             "https://t.me/VAMPIREUPDATES"
         )
 
-        self.AUTO_END = (
-            getenv("AUTO_END", "False").lower() == "true"
-        )
+        self.AUTO_END = getenv(
+            "AUTO_END",
+            "False"
+        ).lower() == "true"
 
-        self.AUTO_LEAVE = (
-            getenv("AUTO_LEAVE", "False").lower() == "true"
-        )
+        self.AUTO_LEAVE = getenv(
+            "AUTO_LEAVE",
+            "False"
+        ).lower() == "true"
 
-        self.VIDEO_PLAY = (
-            getenv("VIDEO_PLAY", "True").lower() == "true"
-        )
+        self.VIDEO_PLAY = getenv(
+            "VIDEO_PLAY",
+            "True"
+        ).lower() == "true"
 
         self.COOKIES_URL = [
             url
-            for url in getenv("COOKIES_URL", "").split(" ")
-            if url and "batbin.me" in url
+            for url in getenv("COOKIES_URL", "").split()
+            if url
         ]
 
         # xBit API
@@ -80,7 +65,6 @@ class Config:
             "xbit_26LDtCp-c1wtWGnbrQ68jrkdKrVQpFNS"
         )
 
-        # Backward compatibility
         self.YOUTUBE_API_KEY = getenv(
             "YOUTUBE_API_KEY",
             self.YT_API_KEY
@@ -121,3 +105,18 @@ class Config:
             raise SystemExit(
                 f"Missing required environment variables: {', '.join(missing)}"
             )
+
+
+config = Config()
+
+# Backward compatibility
+API_ID = config.API_ID
+API_HASH = config.API_HASH
+BOT_TOKEN = config.BOT_TOKEN
+MONGO_URL = config.MONGO_URL
+LOGGER_ID = config.LOGGER_ID
+OWNER_ID = config.OWNER_ID
+
+YT_API_KEY = config.YT_API_KEY
+YTPROXY_URL = config.YTPROXY_URL
+YOUTUBE_API_KEY = config.YOUTUBE_API_KEY
