@@ -192,7 +192,7 @@ class Inline:
                     self.ikb(text=lang["aloneowner"], user_id=config.OWNER_ID, style=ButtonStyle.DANGER),
                     self.ikb(
                         text=lang["source"],
-                        url="https://t.me/ToxicPart", style=ButtonStyle.DANGER
+                        url="https://t.me/llNICK_UPDATESll", style=ButtonStyle.DANGER
                     )
                 ]
             ]
